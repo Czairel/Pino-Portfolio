@@ -142,7 +142,7 @@ export default function Loader({ onDone }) {
           .call(releaseIntro, null, 2.1)
           .to(root, { opacity: 0, duration: 0.6 }, 2.1);
 
-        skipRef.current = () => calm.timeScale(5);
+        skipRef.current = () => calm.progress(1);
         return;
       }
 
@@ -203,7 +203,7 @@ export default function Loader({ onDone }) {
         .to(beam, { opacity: 0, duration: 0.35, ease: "power1.in" }, 2.15);
 
       // Skip
-      skipRef.current = () => tl.timeScale(5);
+      skipRef.current = () => tl.progress(1);
     }, root);
 
     const onKey = (event) => {
@@ -221,7 +221,7 @@ export default function Loader({ onDone }) {
   const { W, H, board } = view;
 
   return (
-    <div className="ld-root" ref={rootRef} onClick={() => skipRef.current?.()}>
+    <div className="ld-root" ref={rootRef}>
       <p className="sr-only" role="status">
         Loading portfolio
       </p>
@@ -232,7 +232,12 @@ export default function Loader({ onDone }) {
         <Board board={board} W={W} H={H} />
       </div>
       <div className="ld-beam" aria-hidden="true" />
-      <button type="button" className="ld-skip" aria-label="Skip intro animation">
+      <button
+        type="button"
+        className="ld-skip"
+        aria-label="Skip intro animation"
+        onClick={() => skipRef.current?.()}
+      >
         Skip
       </button>
     </div>
