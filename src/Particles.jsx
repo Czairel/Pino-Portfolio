@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { prefersReducedMotion } from "./motion.js";
 
-// tsParticles is loaded on demand so it never blocks the first paint.
+// Particles
 export default function ParticlesBackground() {
   const ref = useRef(null);
 

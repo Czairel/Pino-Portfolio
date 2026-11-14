@@ -1,8 +1,4 @@
-/* ==========================================================================
-   Design tokens
-   Direction: deep dark base, a single blue accent (from the Czai logo),
-   Space Grotesk display + Archivo body, glass surfaces, restrained motion.
-   ========================================================================== */
+/* Tokens */
 :root {
     color-scheme: dark;
 
@@ -35,9 +31,7 @@
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ==========================================================================
-   Base
-   ========================================================================== */
+/* Base */
 *,
 *::before,
 *::after {
@@ -46,7 +40,7 @@
 
 html {
     background: var(--bg);
-    scrollbar-gutter: stable; /* no layout shift when the intro locks scroll */
+    scrollbar-gutter: stable; /* Layout */
     -webkit-text-size-adjust: 100%;
 }
 
@@ -62,7 +56,7 @@ body {
     text-rendering: optimizeLegibility;
 }
 
-/* Ambient colour glows */
+/* Atmosphere */
 body::before {
     content: "";
     position: fixed;
@@ -75,7 +69,7 @@ body::before {
         radial-gradient(800px 500px at 60% 112%, rgba(20, 86, 216, 0.14), transparent 60%);
 }
 
-/* Fine film grain for depth */
+/* Grain */
 body::after {
     content: "";
     position: fixed;
@@ -168,9 +162,7 @@ main {
     color: transparent;
 }
 
-/* ==========================================================================
-   Buttons & links
-   ========================================================================== */
+/* Controls */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -284,9 +276,7 @@ main {
     gap: 10px;
 }
 
-/* ==========================================================================
-   Header
-   ========================================================================== */
+/* Header */
 .site-header {
     position: sticky;
     top: 0;
@@ -366,9 +356,7 @@ main {
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-/* ==========================================================================
-   Typography blocks
-   ========================================================================== */
+/* Typography */
 .eyebrow {
     display: inline-flex;
     align-items: center;
@@ -395,8 +383,7 @@ main {
     font-weight: 600;
     line-height: 1.05;
     letter-spacing: -0.025em;
-    /* Not "balance": GSAP SplitText can't keep a balanced wrap, so the heading
-       would re-wrap (jump) while it animates in. */
+    /* Wrapping */
     text-wrap: wrap;
 }
 
@@ -416,7 +403,7 @@ main {
     padding-block: clamp(2.5rem, 6vw, 5rem) clamp(3rem, 7vw, 6rem);
 }
 
-/* Pages whose content should start close to the menu (Projects) */
+/* Pages */
 .page-top {
     padding-top: clamp(0.75rem, 2vw, 1.75rem);
 }
@@ -425,9 +412,7 @@ main {
     margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
 }
 
-/* ==========================================================================
-   Hero
-   ========================================================================== */
+/* Hero */
 .hero {
     position: relative;
     display: grid;
@@ -436,11 +421,11 @@ main {
     gap: clamp(2rem, 6vw, 5rem);
     min-height: calc(100svh - var(--header-h));
     padding-block: clamp(2rem, 5vw, 4rem);
-    /* the rotating orbit ring's bounding box would otherwise cause sideways scroll */
+    /* Overflow */
     overflow-x: clip;
 }
 
-/* Soft dot grid behind the hero */
+/* Grid */
 .hero::before {
     content: "";
     position: absolute;
@@ -459,7 +444,7 @@ main {
     font-weight: 600;
     line-height: 1;
     letter-spacing: -0.035em;
-    /* Not "balance": see .section-title */
+    /* Wrapping */
     text-wrap: wrap;
 }
 
@@ -561,9 +546,7 @@ main {
     filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.45));
 }
 
-/* ==========================================================================
-   Card surface (shared)
-   ========================================================================== */
+/* Cards */
 .card {
     position: relative;
     overflow: hidden;
@@ -574,7 +557,7 @@ main {
     transition: transform 0.35s var(--ease), border-color 0.3s, box-shadow 0.35s var(--ease);
 }
 
-/* Cursor-follow glow */
+/* Spotlight */
 .card::before {
     content: "";
     position: absolute;
@@ -594,9 +577,7 @@ main {
     opacity: 1;
 }
 
-/* ==========================================================================
-   About
-   ========================================================================== */
+/* About */
 .about {
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
@@ -606,7 +587,7 @@ main {
 }
 
 .about-copy .body-lg {
-    text-wrap: pretty; /* avoids a single word alone on the last line */
+    text-wrap: pretty; /* Wrapping */
 }
 
 .about-copy .body-lg + .body-lg {
@@ -637,7 +618,7 @@ main {
     filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.4));
 }
 
-/* Icon tile (used on the Contact page) */
+/* Contact */
 .principle-icon {
     display: inline-grid;
     place-items: center;
@@ -650,9 +631,7 @@ main {
     color: var(--accent-text);
 }
 
-/* ==========================================================================
-   Projects
-   ========================================================================== */
+/* Projects */
 .project-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -693,8 +672,8 @@ main {
 
 .project-number {
     position: absolute;
-    z-index: 1; /* stays above a screenshot preview */
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7); /* readable over bright screenshots */
+    z-index: 1; /* Layer */
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7); /* Contrast */
     top: 14px;
     left: 18px;
     font-family: var(--font-display);
@@ -835,9 +814,7 @@ main {
     font-weight: 500;
 }
 
-/* ==========================================================================
-   Contact
-   ========================================================================== */
+/* Contact */
 .contact {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -935,9 +912,7 @@ main {
     margin-bottom: 1.5rem;
 }
 
-/* ==========================================================================
-   Footer
-   ========================================================================== */
+/* Footer */
 .site-footer {
     border-top: 1px solid var(--border);
     background: rgba(7, 8, 12, 0.6);
@@ -968,9 +943,7 @@ main {
     height: 44px;
 }
 
-/* ==========================================================================
-   Responsive
-   ========================================================================== */
+/* Responsive */
 @media (max-width: 900px) {
     .hero,
     .about,
@@ -1006,13 +979,12 @@ main {
         --tabbar-h: 64px;
     }
 
-    /* Room above the floating tab bar so the footer is never covered */
+    /* Spacing */
     body {
         padding-bottom: calc(var(--tabbar-h) + 28px + env(safe-area-inset-bottom, 0px));
     }
 
-    /* Slim one-row header: logo + Hire Me.
-       No backdrop-filter here: it would trap the fixed tab bar inside the header. */
+    /* Header */
     .site-header {
         padding-top: 10px;
     }
@@ -1029,7 +1001,7 @@ main {
         margin-right: auto;
     }
 
-    /* Navigation moves to a floating tab bar within thumb reach */
+    /* Navigation */
     .main-nav {
         position: fixed;
         left: 50%;
@@ -1055,7 +1027,7 @@ main {
         font-size: 0.92rem;
     }
 
-    /* Hero: less dead space, bigger tap targets */
+    /* Hero */
     .hero {
         gap: 2rem;
         padding-block: 1.5rem 2.5rem;
@@ -1094,7 +1066,7 @@ main {
         grid-template-columns: 1fr;
     }
 
-    /* Slightly smaller so the whole link fits on one line instead of being cut */
+    /* Contact */
     .contact-value {
         font-size: clamp(0.75rem, 3.6vw, 0.95rem);
     }
@@ -1105,9 +1077,7 @@ main {
     }
 }
 
-/* ==========================================================================
-   Reduced motion (only when RESPECT_REDUCED_MOTION is true in motion.js)
-   ========================================================================== */
+/* Motion */
 html[data-reduce-motion] .portrait-ring {
     animation: none;
 }
@@ -1128,9 +1098,7 @@ html[data-reduce-motion] .contact-card:hover .contact-arrow {
     transform: none;
 }
 
-/* ==========================================================================
-   Lenis smooth scroll (recommended base rules)
-   ========================================================================== */
+/* Scrolling */
 html.lenis,
 html.lenis body {
     height: auto;
@@ -1144,9 +1112,7 @@ html.lenis body {
     overflow: clip;
 }
 
-/* ==========================================================================
-   tsParticles background (sits above the glows, below all content)
-   ========================================================================== */
+/* Particles */
 .particles {
     position: fixed;
     inset: 0;
@@ -1160,7 +1126,7 @@ html.lenis body {
     height: 100%;
 }
 
-/* Wrapper GSAP moves for the pointer parallax */
+/* Parallax */
 .portrait-figure {
     position: absolute;
     inset: 0;

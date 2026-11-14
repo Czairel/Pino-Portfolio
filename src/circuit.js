@@ -1,9 +1,4 @@
-// Procedural circuit-board layout for the intro loader.
-// The logo is treated as a chip; traces leave its four edges, run straight,
-// bend at 45 degrees (like routed PCB traces) and end in a via pad.
-// Everything is computed from the viewport size, so it fits phones and wide
-// screens alike. The seeded random generator keeps the layout identical on
-// every visit.
+// Board
 
 function seededRandom(seed) {
   let a = seed >>> 0;
@@ -15,7 +10,7 @@ function seededRandom(seed) {
   };
 }
 
-const LOGO_ASPECT = 96 / 197; // height / width of Logo.webp
+const LOGO_ASPECT = 96 / 197; // Aspect
 const fmt = (n) => Math.round(n * 10) / 10;
 
 export function buildBoard(W, H) {
@@ -28,7 +23,7 @@ export function buildBoard(W, H) {
   const hw = cw / 2;
   const hh = ch / 2;
 
-  // d = direction leaving the chip, p = direction along the chip edge
+  // Directions
   const sides = [
     { d: [-1, 0], p: [0, 1], half: hw, pins: 4, span: ch * 0.74, room: cx - hw },
     { d: [1, 0], p: [0, 1], half: hw, pins: 4, span: ch * 0.74, room: W - cx - hw },
@@ -44,7 +39,7 @@ export function buildBoard(W, H) {
       const sx = cx + d[0] * half + p[0] * offset;
       const sy = cy + d[1] * half + p[1] * offset;
 
-      // Outer pins drift further outward, so neighbouring traces never cross
+      // Spacing
       const sign = offset === 0 ? (rand() > 0.5 ? 1 : -1) : Math.sign(offset);
       const reach = (room - 14) * (0.55 + rand() * 0.43);
       const straight = 12 + rand() * 18;

@@ -15,11 +15,9 @@ import {
   useSmoothScroll,
 } from "./motion.js";
 
-/* ---------- small helpers ---------- */
+/* Helpers */
 
-// Keeps the last two words ("F. Pino") on one line so the surname can't be
-// orphaned. A nowrap span is used, not a non-breaking space: SplitText treats
-// a non-breaking space as a normal word break and the heading would re-wrap.
+// Name
 function HeroName({ name }) {
   const words = name.split(" ");
   if (words.length < 3) return name;
@@ -116,14 +114,14 @@ function Icon({ name, size = 20 }) {
   );
 }
 
-// Cursor-follow glow on cards (sets --mx / --my read by .card::before)
+// Spotlight
 function spotlight(event) {
   const rect = event.currentTarget.getBoundingClientRect();
   event.currentTarget.style.setProperty("--mx", `${event.clientX - rect.left}px`);
   event.currentTarget.style.setProperty("--my", `${event.clientY - rect.top}px`);
 }
 
-// Only channels that have a value in data.js are shown
+// Channels
 function getChannels() {
   const channels = [];
   if (links.github) {
@@ -159,27 +157,6 @@ function getChannels() {
   return channels;
 }
 
-function SocialLinks() {
-  const channels = getChannels();
-  if (channels.length === 0) return null;
-  return (
-    <ul className="social-links" aria-label="Social links">
-      {channels.map((c) => (
-        <li key={c.key}>
-          <a
-            className="icon-btn"
-            href={c.href}
-            aria-label={c.label}
-            {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-          >
-            <Icon name={c.icon} />
-          </a>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 function SectionHead({ eyebrow, title, children }) {
   return (
     <div className="section-head">
@@ -194,7 +171,7 @@ function SectionHead({ eyebrow, title, children }) {
   );
 }
 
-/* ---------- layout ---------- */
+/* Layout */
 
 const pageTitles = {
   "/": `${profile.shortName} | ${profile.role}`,
@@ -207,7 +184,7 @@ function Layout() {
   const { pathname } = useLocation();
   useSmoothScroll();
 
-  // On first load the entrance waits until the intro loader opens
+  // Entrance
   useLayoutEffect(() => {
     let cleanup;
     const cancel = afterIntro(() => {
@@ -224,7 +201,7 @@ function Layout() {
     document.title = pageTitles[pathname] ?? `Page not found | ${profile.shortName}`;
   }, [pathname]);
 
-  // A plain "#main" href would collide with hash routing, so focus the element instead.
+  // Accessibility
   const skipToContent = (event) => {
     event.preventDefault();
     document.getElementById("main")?.focus();
@@ -260,7 +237,6 @@ function Layout() {
             © {profile.year} {profile.shortName}. All rights reserved.
           </p>
           <div className="footer-end">
-            <SocialLinks />
             <button
               className="text-link"
               type="button"
@@ -275,7 +251,7 @@ function Layout() {
   );
 }
 
-/* ---------- pages ---------- */
+/* Pages */
 
 function HomePage() {
   useEffect(() => parallaxPortrait(), []);
@@ -304,7 +280,6 @@ function HomePage() {
           <Link className="btn btn-ghost" to="/contact">
             Contact
           </Link>
-          <SocialLinks />
         </div>
 
       </div>

@@ -5,19 +5,10 @@ import { buildBoard } from "./circuit.js";
 import { lockScroll, markIntroSeen, prefersReducedMotion, releaseIntro } from "./motion.js";
 import "./loader.css";
 
-/*
-  Intro: "power-on".
-  1. Circuit traces draw outward from the logo chip and end in via pads.
-  2. Pulses of light run back along every trace into the chip.
-  3. The chip powers up, the whole board lights, a beam crosses the screen.
-  4. The board splits along the beam and slides apart, revealing the page.
+/* Intro */
 
-  The overlay is drawn twice (top half and bottom half), so the logo itself is
-  cut in two as the halves part.
-*/
-
-const PULSE = 64; // length of each travelling pulse, px
-const SPEED = 0.6; // intro speed: 1 = original (~3.1s), 0.6 = ~5.2s, 0.5 = ~6.2s
+const PULSE = 64; // Length
+const SPEED = 0.6; // Speed
 const CHIP_OFF = "0 0 0 1px rgba(93,180,255,0.18), 0 0 0 0 rgba(57,169,255,0)";
 const CHIP_FLASH = "0 0 0 1px rgba(93,180,255,0.95), 0 0 80px 8px rgba(57,169,255,0.6)";
 const CHIP_SETTLED = "0 0 0 1px rgba(93,180,255,0.55), 0 0 40px 2px rgba(57,169,255,0.3)";
@@ -86,7 +77,7 @@ export default function Loader({ onDone }) {
       const bottom = root.querySelector(".ld-bot");
       const beam = root.querySelector(".ld-beam");
 
-      // Start states: traces undrawn, pulses parked past the end of each trace
+      // Initial
       traces.forEach((el) => {
         const len = el.getTotalLength();
         el.style.strokeDasharray = len;
@@ -119,11 +110,9 @@ export default function Loader({ onDone }) {
         doneRef.current();
       };
 
-      // Reduced motion ("Animation effects" off in the OS): nothing moves or
-      // flashes. The finished board fades in, the counter runs, the chip glows
-      // softly and the whole overlay fades away to reveal the page.
+      // Reduced
       if (prefersReducedMotion()) {
-        gsap.set([...chips, ...statuses], { opacity: 1 }); // undo the start state set above
+        gsap.set([...chips, ...statuses], { opacity: 1 }); // Visibility
         gsap.set(traces, { strokeDashoffset: 0 });
         gsap.set(vias, { attr: { r: 4 }, stroke: "#bfe4ff" });
         gsap.set(pulses, { opacity: 0 });
@@ -160,7 +149,7 @@ export default function Loader({ onDone }) {
       const tl = gsap.timeline({ defaults: { ease: "power2.out" }, onComplete: finish });
       tl.timeScale(SPEED);
 
-      // 1. Board wakes up, traces draw outward
+      // Draw
       tl.to(chips, { opacity: 1, duration: 0.5 }, 0.1)
         .to(statuses, { opacity: 1, duration: 0.4 }, 0.3)
         .to(state, { v: 100, duration: 1.45, ease: "none", onUpdate: paint }, 0.15)
@@ -175,14 +164,14 @@ export default function Loader({ onDone }) {
           0.2
         )
 
-        // 2. Light pulses run back into the chip
+        // Pulse
         .to(
           pulses,
           { strokeDashoffset: PULSE, duration: 0.55, ease: "power1.in", delay: (i, el) => own(el) },
           0.8
         )
 
-        // 3. Power on
+        // Power
         .call(
           () => {
             state.on = true;
@@ -207,13 +196,13 @@ export default function Loader({ onDone }) {
         )
         .to(beam, { scaleX: 1, duration: 0.35, ease: "power3.out" }, 1.85)
 
-        // 4. The board splits along the beam; the page is revealed underneath
+        // Reveal
         .call(releaseIntro, null, 2.3)
         .to(top, { yPercent: -50, duration: 0.95, ease: "power4.inOut" }, 2.15)
         .to(bottom, { yPercent: 50, duration: 0.95, ease: "power4.inOut" }, 2.15)
         .to(beam, { opacity: 0, duration: 0.35, ease: "power1.in" }, 2.15);
 
-      // Click, Escape or the Skip button fast-forwards the intro
+      // Skip
       skipRef.current = () => tl.timeScale(5);
     }, root);
 

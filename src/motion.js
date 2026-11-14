@@ -5,23 +5,16 @@ import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(SplitText);
 
-/*
-  Should the site honour the visitor's "reduce motion" setting (on Windows:
-  Accessibility > Visual effects > Animation effects turned off)?
-    false: the full animation plays for everyone (the intro still has Skip / Esc).
-    true:  those visitors get a calm, fade-only intro and no movement at all.
-  Some people turn that setting on because motion makes them dizzy, which is
-  the reason to leave this true if you want to be safe for them.
-*/
+/* Accessibility */
 export const RESPECT_REDUCED_MOTION = false;
 
 const reducedMotionQuery = () => window.matchMedia("(prefers-reduced-motion: reduce)");
 export const prefersReducedMotion = () => RESPECT_REDUCED_MOTION && reducedMotionQuery().matches;
 
-// Lets style.css switch off hover movement and the orbiting ring the same way
+// Motion
 if (prefersReducedMotion()) document.documentElement.dataset.reduceMotion = "";
 
-/* ---------- Lenis smooth scrolling (driven by GSAP's ticker) ---------- */
+/* Scrolling */
 
 let lenis = null;
 
@@ -31,7 +24,7 @@ export function useSmoothScroll() {
 
     const instance = new Lenis({ lerp: 0.1, smoothWheel: true });
     lenis = instance;
-    if (scrollLocks > 0) instance.stop(); // intro still playing
+    if (scrollLocks > 0) instance.stop(); // Intro
 
     const tick = (time) => instance.raf(time * 1000);
     gsap.ticker.add(tick);
@@ -45,7 +38,7 @@ export function useSmoothScroll() {
   }, []);
 }
 
-/* ---------- Intro loader hooks ---------- */
+/* Intro */
 
 const INTRO_KEY = "intro-seen";
 let scrollLocks = 0;
@@ -54,7 +47,7 @@ const introSeen = () => {
   try {
     return sessionStorage.getItem(INTRO_KEY) === "1";
   } catch {
-    return false; // storage blocked: just play it
+    return false; // Storage
   }
 };
 
@@ -62,22 +55,20 @@ export function markIntroSeen() {
   try {
     sessionStorage.setItem(INTRO_KEY, "1");
   } catch {
-    /* storage blocked: the intro will replay next visit, which is harmless */
+    /* Storage */
   }
 }
 
-// Play the intro once per browser session. Reduced-motion users get a calm,
-// fade-only version of it (see Loader.jsx) instead of none at all.
+// Session
 export const shouldPlayIntro = () => !introSeen();
 
-// Why the intro was skipped (shown in the console during development), or null.
+// Diagnostics
 export function introSkipReason() {
   if (introSeen()) return "it already played this session. Run sessionStorage.clear() and refresh";
   return null;
 }
 
-// Block scrolling while the loader covers the page. Lenis may not exist yet
-// (it starts after first paint), so useSmoothScroll checks scrollLocks too.
+// Locking
 export function lockScroll() {
   const root = document.documentElement;
   const previous = root.style.overflow;
@@ -94,22 +85,20 @@ export function lockScroll() {
   };
 }
 
-// The page entrance waits for the loader to open, so nobody misses it.
+// Release
 let introReleased = !shouldPlayIntro();
 const introWaiters = new Set();
 
 export function releaseIntro() {
   introReleased = true;
-  // Called from inside the loader's GSAP timeline, so hop out of its context first.
-  // Otherwise GSAP files the page's SplitText under the loader and reverts it
-  // (re-wrapping the heading) the moment the loader unmounts.
+  // Context
   setTimeout(() => {
     introWaiters.forEach((fn) => fn());
     introWaiters.clear();
   }, 0);
 }
 
-// Runs fn now if the intro is over, otherwise when it opens. Returns a canceller.
+// Waiting
 export function afterIntro(fn) {
   if (introReleased) {
     fn();
@@ -127,9 +116,7 @@ export function scrollToTop(immediate = false) {
   }
 }
 
-/* ---------- GSAP: staggered page entrance ---------- */
-// Headings marked [data-split] reveal word by word; everything marked
-// .reveal fades up in document order. Returns a cleanup function.
+/* Entrance */
 
 export function revealPage(root) {
   if (!root || prefersReducedMotion()) return undefined;
@@ -138,8 +125,7 @@ export function revealPage(root) {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
     root.querySelectorAll("[data-split]").forEach((el) => {
-      // Split headings must not use text-wrap: balance (see style.css): SplitText
-      // cannot keep the balanced wrap, so the heading would re-wrap mid-entrance.
+      // Wrapping
       const split = SplitText.create(el, { type: "words" });
       tl.from(
         split.words,
@@ -148,7 +134,7 @@ export function revealPage(root) {
       );
     });
 
-    // Cards only fade in, all together and immediately: no sliding, no stagger delay
+    // Cards
     const fades = root.querySelectorAll(".reveal-fade");
     if (fades.length) {
       tl.from(fades, { opacity: 0, duration: 0.45, ease: "power1.out", clearProps: "opacity" }, 0);
@@ -167,7 +153,7 @@ export function revealPage(root) {
   return () => ctx.revert();
 }
 
-/* ---------- GSAP: hero portrait follows the pointer (depth parallax) ---------- */
+/* Parallax */
 
 export function parallaxPortrait() {
   const fine = window.matchMedia("(hover: hover) and (pointer: fine)");

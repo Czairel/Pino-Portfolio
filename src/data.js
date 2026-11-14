@@ -2,7 +2,7 @@ import scholarvault from "../ScholarVault.webp";
 import shopease from "../ShopEase.webp";
 import twosouls from "../TwoSouls.webp";
 
-// All editable content lives here, so you can update the site without touching the layout code.
+// Content
 
 export const profile = {
   name: "Prince Czairel F. Pino",
@@ -10,7 +10,7 @@ export const profile = {
   role: "Front-End Developer",
   tagline:
     "I enjoy creating clean, accessible, and user-friendly websites.",
-  // Each string is one paragraph on the About page.
+  // Paragraphs
   about: [
     "I'm Prince Czairel Pino, a front-end developer who enjoys creating clean, accessible, and user-friendly websites.",
     "I care about the details that make a site feel good to use: a clear layout, readable text, and interfaces that work well for everyone on any device. I like turning an idea into something people can actually click through and use.",
@@ -19,13 +19,15 @@ export const profile = {
   year: 2026,
 };
 
-// Fill in any empty value and the matching link appears automatically
-// in the hero, the contact page and the footer. Empty ones stay hidden.
+// Channels
 export const links = {
   github: "https://github.com/czairel",
   linkedin: "",
-  email: "",
+  email: "202411713@gordoncollege.edu.ph",
 };
+
+
+
 
 export const projects = [
   {
@@ -37,7 +39,7 @@ export const projects = [
     live: "",
     repo: "",
     image: scholarvault,
-    zoom: 1.3, // zooms the screenshot in so the small login card is readable
+    zoom: 1.3, // Zoom
     badge: "Web-based system",
     tone: "blue",
   },

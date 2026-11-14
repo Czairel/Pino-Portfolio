@@ -1,7 +1,4 @@
-/* ==========================================================================
-   Intro loader: circuit board power-on
-   Uses the site tokens (--bg, --accent, ...) so it follows any palette change.
-   ========================================================================== */
+/* Loader */
 .ld-root {
     position: fixed;
     inset: 0;
@@ -11,7 +8,7 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Two halves of the same board; the page is revealed when they part */
+/* Halves */
 .ld-half {
     position: absolute;
     inset: 0;
@@ -24,7 +21,7 @@
         var(--bg);
 }
 
-/* 1px overlap hides any hairline seam between the halves */
+/* Seam */
 .ld-top {
     clip-path: inset(0 0 calc(50% - 1px) 0);
 }
@@ -83,7 +80,7 @@
     stroke-width: 1.5;
 }
 
-/* The logo acts as the chip: dim until the board powers on */
+/* Chip */
 .ld-chip {
     position: absolute;
     overflow: hidden;
@@ -123,7 +120,7 @@
     box-shadow: 0 0 0 0 rgba(57, 169, 255, 0);
 }
 
-/* The light beam that marks the split line */
+/* Beam */
 .ld-beam {
     position: absolute;
     left: 0;
