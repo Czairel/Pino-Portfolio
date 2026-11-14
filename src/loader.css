@@ -1,0 +1,167 @@
+/* ==========================================================================
+   Intro loader: circuit board power-on
+   Uses the site tokens (--bg, --accent, ...) so it follows any palette change.
+   ========================================================================== */
+.ld-root {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    cursor: pointer;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Two halves of the same board; the page is revealed when they part */
+.ld-half {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    will-change: transform;
+    background:
+        radial-gradient(900px 560px at 88% -8%, rgba(20, 86, 216, 0.3), transparent 62%),
+        radial-gradient(700px 500px at -6% 34%, rgba(57, 169, 255, 0.1), transparent 60%),
+        radial-gradient(800px 500px at 60% 112%, rgba(20, 86, 216, 0.14), transparent 60%),
+        var(--bg);
+}
+
+/* 1px overlap hides any hairline seam between the halves */
+.ld-top {
+    clip-path: inset(0 0 calc(50% - 1px) 0);
+}
+
+.ld-bot {
+    clip-path: inset(50% 0 0 0);
+}
+
+.ld-board {
+    position: absolute;
+    inset: 0;
+}
+
+.ld-dots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.3px);
+    background-size: 30px 30px;
+    -webkit-mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent 80%);
+    mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent 80%);
+}
+
+.ld-svg {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: visible;
+}
+
+.ld-trace,
+.ld-pulse {
+    fill: none;
+    stroke-linecap: butt;
+    stroke-linejoin: round;
+}
+
+.ld-trace {
+    stroke: rgba(57, 169, 255, 0.3);
+    stroke-width: 1.5;
+}
+
+.ld-pulse-glow {
+    stroke: rgba(57, 169, 255, 0.28);
+    stroke-width: 8;
+}
+
+.ld-pulse-core {
+    stroke: #cfeaff;
+    stroke-width: 2.4;
+}
+
+.ld-via {
+    fill: var(--bg);
+    stroke: rgba(57, 169, 255, 0.7);
+    stroke-width: 1.5;
+}
+
+/* The logo acts as the chip: dim until the board powers on */
+.ld-chip {
+    position: absolute;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #0b1020;
+    box-shadow: 0 0 0 1px rgba(93, 180, 255, 0.18), 0 0 0 0 rgba(57, 169, 255, 0);
+}
+
+.ld-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) brightness(0.35);
+}
+
+.ld-status {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    font: 500 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+}
+
+.ld-led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #26324a;
+    box-shadow: 0 0 0 0 rgba(57, 169, 255, 0);
+}
+
+/* The light beam that marks the split line */
+.ld-beam {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    z-index: 2;
+    height: 2px;
+    margin-top: -1px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, #9fd6ff 15%, #ffffff 50%, #9fd6ff 85%, transparent);
+    box-shadow: 0 0 24px 4px rgba(57, 169, 255, 0.7);
+    transform-origin: 50% 50%;
+}
+
+.ld-skip {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    z-index: 3;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-muted);
+    font: 500 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.ld-skip:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+}
+
+.ld-skip:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
