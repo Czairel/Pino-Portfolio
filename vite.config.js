@@ -1,5 +1,8 @@
 import { defineConfig } from "vite";
 
-export default defineConfig({
-  base: process.env.GITHUB_ACTIONS ? "/Portfolio/" : "/",
-});
+export default defineConfig(({ mode }) => ({
+  base: mode === "production" ? "/Portfolio/" : "/",
+  build: {
+    outDir: "docs",
+  },
+}));
