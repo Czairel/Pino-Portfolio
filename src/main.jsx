@@ -4,7 +4,7 @@ import { HashRouter } from "react-router-dom";
 import "@fontsource-variable/space-grotesk/wght.css";
 import "@fontsource-variable/archivo/wght.css";
 import App from "./App.jsx";
-import "../style.css";
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

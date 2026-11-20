@@ -1,0 +1,242 @@
+@import "tailwindcss";
+
+@source not "../docs";
+
+@theme {
+  --color-canvas: #07080c;
+  --color-surface: rgb(255 255 255 / 0.035);
+  --color-surface-hover: rgb(255 255 255 / 0.065);
+  --color-line: rgb(255 255 255 / 0.09);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+
+  --color-ink: #f5f7fb;
+  --color-ink-muted: #a3acbd;
+  --color-ink-faint: #8893a6;
+
+  --color-accent: #39a9ff;
+  --color-accent-text: #5db4ff;
+  --color-accent-deep: #1456d8;
+  --color-accent-mid: #1f6fe5;
+
+  --font-display: "Space Grotesk Variable", "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Archivo Variable", "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-canvas);
+    scrollbar-gutter: stable;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100svh;
+    background: transparent;
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Atmosphere */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(900px 560px at 88% -8%, rgba(20, 86, 216, 0.3), transparent 62%),
+      radial-gradient(700px 500px at -6% 34%, rgba(57, 169, 255, 0.1), transparent 60%),
+      radial-gradient(800px 500px at 60% 112%, rgba(20, 86, 216, 0.14), transparent 60%);
+  }
+
+  /* Grain */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+  }
+
+  ::selection {
+    background: rgba(57, 169, 255, 0.35);
+    color: #fff;
+  }
+
+  /* Visible keyboard focus everywhere */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  /* Only active when RESPECT_REDUCED_MOTION is true in src/lib/motion.js */
+  html[data-reduce-motion] *,
+  html[data-reduce-motion] *::before,
+  html[data-reduce-motion] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Effects that plain utilities can't express (gradients, masks, pseudo-elements) */
+@layer components {
+  .gradient-text {
+    background: linear-gradient(100deg, #4f8dff 0%, #39a9ff 50%, #8fd3ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Card with a cursor spotlight (--mx / --my are set by lib/spotlight.js) */
+  .card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    /* Not opacity/transform: GSAP animates those on entrance and a CSS transition would drag it out */
+    transition: translate 0.35s var(--ease-smooth), border-color 0.3s, box-shadow 0.35s var(--ease-smooth);
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 0%), rgba(57, 169, 255, 0.16), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  @media (hover: hover) {
+    .card:hover {
+      border-color: rgba(57, 169, 255, 0.38);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+  }
+
+  .panel {
+    border: 1px solid var(--color-line-strong);
+    border-radius: 28px;
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgba(57, 169, 255, 0.16), transparent 55%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 40px 80px -40px rgba(20, 86, 216, 0.5);
+  }
+
+  /* Dotted grid behind the hero */
+  .hero-grid::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1.3px);
+    background-size: 30px 30px;
+    -webkit-mask-image: radial-gradient(60% 70% at 72% 42%, #000, transparent 78%);
+    mask-image: radial-gradient(60% 70% at 72% 42%, #000, transparent 78%);
+  }
+
+  .photo-panel {
+    background: radial-gradient(circle at 50% 24%, #2f66d9 0%, #1a408f 40%, #0b1a45 80%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 40px 90px -30px rgba(20, 86, 216, 0.6);
+  }
+
+  .tone-blue {
+    background:
+      radial-gradient(120% 90% at 85% 0%, #39a9ff 0%, transparent 55%),
+      radial-gradient(90% 90% at 0% 100%, #1456d8 0%, transparent 60%),
+      #0b1a45;
+  }
+
+  .tone-violet {
+    background:
+      radial-gradient(120% 90% at 85% 0%, #8b7cf6 0%, transparent 55%),
+      radial-gradient(90% 90% at 0% 100%, #3b3fc4 0%, transparent 60%),
+      #15133a;
+  }
+
+  /* Home portrait (the .portrait-* classes are also used by lib/motion.js for the parallax) */
+  .portrait-glow {
+    position: absolute;
+    inset: 4%;
+    z-index: -3;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 42%, rgba(57, 169, 255, 0.6), rgba(20, 86, 216, 0.4) 48%, transparent 72%);
+    filter: blur(36px);
+  }
+
+  .portrait-disc {
+    position: absolute;
+    inset: 6%;
+    z-index: -2;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: radial-gradient(circle at 50% 28%, #2f66d9 0%, #1a408f 38%, #0b1a45 76%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 30px 80px -20px rgba(20, 86, 216, 0.6);
+  }
+
+  .portrait-orbit {
+    position: absolute;
+    inset: -4%;
+    z-index: -1;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .portrait-ring {
+    position: absolute;
+    inset: -4%;
+    z-index: -1;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent 0 68%, rgba(143, 211, 255, 0.95) 88%, transparent 100%);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+    animation: orbit 16s linear infinite;
+  }
+
+  .portrait-photo {
+    position: absolute;
+    left: 50%;
+    bottom: 5%;
+    width: 94%;
+    transform: translateX(-50%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 99%);
+    mask-image: linear-gradient(to bottom, #000 80%, transparent 99%);
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.45));
+  }
+}
+
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Smooth scrolling (required by Lenis) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
